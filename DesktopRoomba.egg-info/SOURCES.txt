@@ -1,0 +1,7 @@
+DesktopRoomba.py
+README.md
+setup.py
+DesktopRoomba.egg-info/PKG-INFO
+DesktopRoomba.egg-info/SOURCES.txt
+DesktopRoomba.egg-info/dependency_links.txt
+DesktopRoomba.egg-info/top_level.txt
