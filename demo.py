@@ -7,7 +7,7 @@ DesktopRoomba.Read_Ultrasonic_Distance()
 DesktopRoomba.Read_IR_Reflectance()
 
 IMU=DesktopRoomba.Setup_IMU()
-DesktopRoomba.Read_Angle()
+DesktopRoomba.Read_Angle(IMU)
 DesktopRoomba.Read_Acceleration(IMU)
 
 

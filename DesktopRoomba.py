@@ -19,8 +19,9 @@ def Setup_IMU():
     print("IMU is set up")
     return s33
 
-def Read_Angle():
-    print("Turning Angle is")
+def Read_Angle(IMU):
+    print("Gyro X:%.2f, Y: %.2f, Z: %.2f radians/s" % (IMU.gyro))
+    return IMU.gyro
 
 def Read_Acceleration(IMU):
     print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2"%(IMU.acceleration))
