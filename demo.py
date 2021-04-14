@@ -1,5 +1,5 @@
 import DesktopRoomba
-
+from time import sleep
 DesktopRoomba.setup()
 
 DesktopRoomba.Read_Ultrasonic_Distance()
@@ -17,6 +17,11 @@ DesktopRoomba.Away_from_edges()
 DesktopRoomba.Turn_Left()
 DesktopRoomba.Turn_Right()
 DesktopRoomba.Forward()
+sleep(2)
+DesktopRoomba.Stop()
+sleep(2)
 DesktopRoomba.Backward()
+sleep(2)
+DesktopRoomba.Stop()
 
 

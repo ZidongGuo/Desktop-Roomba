@@ -6,6 +6,21 @@ import RPi.GPIO as GPIO
 from time import sleep
 
 def setup():
+    GPIO.cleanup()
+    global Motor1A
+    global Motor1B
+    global Motor1E
+    global Motor2A
+    global Motor2B
+    global Motor2E
+    Motor1A = 23
+    Motor1B = 24
+    Motor1E = 25
+    Motor2A = 11
+    Motor2B = 9
+    Motor2E = 10
+
+
     print("All programs have been set up successfully!")
     return True
 
@@ -44,13 +59,7 @@ def Turn_Right():
     print("Turn Right")
 
 def Forward():
-    GPIO.setmode(GPIO.BOARD)
-    Motor1A = 16
-    Motor1B = 18
-    Motor1E = 22
-    Motor2A = 23
-    Motor2B = 21
-    Motor2E = 19
+    GPIO.setmode(GPIO.BCM)
     GPIO.setup(Motor1A,GPIO.OUT)
     GPIO.setup(Motor1B,GPIO.OUT)
     GPIO.setup(Motor1E,GPIO.OUT)
@@ -66,3 +75,15 @@ def Forward():
     GPIO.output(Motor2E,GPIO.HIGH)
 def Backward():
     print("go backward")
+    GPIO.output(Motor1A,GPIO.LOW)
+    GPIO.output(Motor1B,GPIO.HIGH)
+    GPIO.output(Motor1E,GPIO.HIGH)
+
+    GPIO.output(Motor2A,GPIO.LOW)
+    GPIO.output(Motor2B,GPIO.HIGH)
+    GPIO.output(Motor2E,GPIO.HIGH)
+
+def Stop():
+    GPIO.output(Motor1E,GPIO.LOW)
+    GPIO.output(Motor2E,GPIO.LOW)
+    print("Robot is stopped")
