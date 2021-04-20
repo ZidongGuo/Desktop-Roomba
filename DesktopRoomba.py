@@ -13,13 +13,23 @@ def setup():
     global Motor2A
     global Motor2B
     global Motor2E
+    global pwm1
+    global pwm2
     Motor1A = 23
     Motor1B = 24
     Motor1E = 25
     Motor2A = 11
     Motor2B = 9
     Motor2E = 10
-
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(Motor1A,GPIO.OUT)
+    GPIO.setup(Motor1B,GPIO.OUT)
+    GPIO.setup(Motor1E,GPIO.OUT)
+    GPIO.setup(Motor2A,GPIO.OUT)
+    GPIO.setup(Motor2B,GPIO.OUT)
+    GPIO.setup(Motor2E,GPIO.OUT)
+    pwm1=GPIO.PWM(Motor1E,100)
+    pwm2=GPIO.PWM(Motor2E,100)
 
     print("All programs have been set up successfully!")
     return True
@@ -53,27 +63,51 @@ def Set_PWM_Frequency():
 def Away_from_edges():
     print("Move away from edges")
 
-def Turn_Left():
+def Turn_Left(Time):
     print("Turn Left")
-def Turn_Right():
-    print("Turn Right")
+    pwm1.start(40)
+    pwm2.start(0)
 
-def Forward():
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(Motor1A,GPIO.OUT)
-    GPIO.setup(Motor1B,GPIO.OUT)
-    GPIO.setup(Motor1E,GPIO.OUT)
-    GPIO.setup(Motor2A,GPIO.OUT)
-    GPIO.setup(Motor2B,GPIO.OUT)
-    GPIO.setup(Motor2E,GPIO.OUT)
+    GPIO.output(Motor1A,GPIO.HIGH)
+    GPIO.output(Motor1B,GPIO.LOW)
+    GPIO.output(Motor1E,GPIO.HIGH)
+
+    GPIO.output(Motor2A,GPIO.HIGH)
+    GPIO.output(Motor2B,GPIO.LOW)
+    GPIO.output(Motor2E,GPIO.HIGH)
+
+    sleep(Time)
+def Turn_Right(Time):
+    print("Turn Right")
+    pwm1.start(0)
+    pwm2.start(40)
+
+    GPIO.output(Motor1A,GPIO.HIGH)
+    GPIO.output(Motor1B,GPIO.LOW)
+    GPIO.output(Motor1E,GPIO.HIGH)
+
+    GPIO.output(Motor2A,GPIO.HIGH)
+    GPIO.output(Motor2B,GPIO.LOW)
+    GPIO.output(Motor2E,GPIO.HIGH)
+
+    sleep(Time)
+
+
+def Forward(DC):
     print("go forward")
+    #pwm1=GPIO.PWM(Motor1E,100)
+    pwm1.start(DC)
+    #pwm2=GPIO.PWM(Motor2E,100)
+    pwm2.start(DC)
     GPIO.output(Motor1A,GPIO.HIGH)
     GPIO.output(Motor1B,GPIO.LOW)
     GPIO.output(Motor1E,GPIO.HIGH)
     GPIO.output(Motor2A,GPIO.HIGH)
     GPIO.output(Motor2B,GPIO.LOW)
     GPIO.output(Motor2E,GPIO.HIGH)
-def Backward():
+def Backward(DC):
+    pwm1.start(DC)
+    pwm2.start(DC)
     print("go backward")
     GPIO.output(Motor1A,GPIO.LOW)
     GPIO.output(Motor1B,GPIO.HIGH)
@@ -84,6 +118,8 @@ def Backward():
     GPIO.output(Motor2E,GPIO.HIGH)
 
 def Stop():
+    pwm1.stop()
+    pwm2.stop()
     GPIO.output(Motor1E,GPIO.LOW)
     GPIO.output(Motor2E,GPIO.LOW)
     print("Robot is stopped")
