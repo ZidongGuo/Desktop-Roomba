@@ -2,7 +2,8 @@ import DesktopRoomba
 from time import sleep
 DesktopRoomba.setup()
 
-DesktopRoomba.Read_Ultrasonic_Distance()
+DesktopRoomba.Read_DistanceL()
+DesktopRoomba.Read_DistanceR()
 
 DesktopRoomba.Read_IR_Reflectance()
 

@@ -4,6 +4,7 @@ import busio
 from adafruit_lsm6ds.lsm6ds33 import LSM6DS33
 import RPi.GPIO as GPIO
 from time import sleep
+import sys
 
 def setup():
     GPIO.cleanup()
@@ -15,6 +16,10 @@ def setup():
     global Motor2E
     global pwm1
     global pwm2
+    global EchoL
+    global TrigL
+    global EchoR
+    global TrigR
     Motor1A = 23
     Motor1B = 24
     Motor1E = 25
@@ -30,12 +35,48 @@ def setup():
     GPIO.setup(Motor2E,GPIO.OUT)
     pwm1=GPIO.PWM(Motor1E,100)
     pwm2=GPIO.PWM(Motor2E,100)
-
+    
+    EchoL=20
+    TrigL=21
+    EchoR=12
+    TrigR=16
+    GPIO.setup(TrigL,GPIO.OUT)
+    GPIO.setup(EchoL,GPIO.IN)
+    GPIO.setup(TrigR,GPIO.OUT)
+    GPIO.setup(EchoR,GPIO.IN)
     print("All programs have been set up successfully!")
     return True
 
-def Read_Ultrasonic_Distance():
-    print("Distance from the ultrasonic sensors is ")
+def Read_DistanceL():
+    GPIO.output(TrigL, True)
+    time.sleep(0.00001)
+    GPIO.output(TrigL, False)
+    StartTime=time.time()
+    StopTime=time.time()
+    while GPIO.input(EchoL)==0:
+        StartTime=time.time()
+    while GPIO.input(EchoL)==1:
+        StopTime=time.time()
+    TimePassed=StopTime-StartTime
+    distance= TimePassed *17150
+    print("Distance from the left ultrasonic sensors is ", distance)
+    return distance
+
+def Read_DistanceR():
+    GPIO.output(TrigR, True)
+    time.sleep(0.00001)
+    GPIO.output(TrigR, False)
+    StartTime=time.time()
+    StopTime=time.time()
+    while GPIO.input(EchoR)==0:
+        StartTime=time.time()
+    while GPIO.input(EchoR)==1:
+        StopTime=time.time()
+    TimePassed=StopTime-StartTime
+    distance= TimePassed *17150
+    print("Distance from the right ultrasonic sensors is ", distance)
+    return distance
+
 
 def Read_IR_Reflectance():
     print("The reflectance is ")
