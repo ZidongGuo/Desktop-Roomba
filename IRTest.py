@@ -9,10 +9,10 @@ try:
 
     GPIO.setup(GPIO_ir,GPIO.OUT)
     GPIO.output(GPIO_ir, GPIO.HIGH)
-    time.sleep(1) 
+    time.sleep(0.5) 
     GPIO.setup(GPIO_ir,GPIO.IN)
     start=time.time()
-    GPIO.wait_for_edge(GPIO_ir, GPIO.FALLING)
+    GPIO.wait_for_edge(GPIO_ir, GPIO.FALLING, timeout=200)
     end=time.time()
     print("%f seconds, %f us" %(end-start,1000000*(end-start) ) )
 

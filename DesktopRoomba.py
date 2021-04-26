@@ -20,12 +20,14 @@ def setup():
     global TrigL
     global EchoR
     global TrigR
+    global GPIO_ir
     Motor1A = 23
     Motor1B = 24
     Motor1E = 25
     Motor2A = 11
     Motor2B = 9
     Motor2E = 10
+    GPIO_ir = 1
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(Motor1A,GPIO.OUT)
     GPIO.setup(Motor1B,GPIO.OUT)
@@ -77,9 +79,17 @@ def Read_DistanceR():
     print("Distance from the right ultrasonic sensors is ", distance)
     return distance
 
-
+# High value means low reflectance Low value means high reflectance
 def Read_IR_Reflectance():
-    print("The reflectance is ")
+    GPIO.setup(GPIO_ir,GPIO.OUT)
+    GPIO.output(GPIO_ir, GPIO.HIGH)
+    time.sleep(0.5)
+    GPIO.setup(GPIO_ir,GPIO.IN)
+    start=time.time()
+    GPIO.wait_for_edge(GPIO_ir, GPIO.FALLING)
+    end=time.time()
+    print(" %f us" %1000000*(end-start)  )
+    return 1000000*(end-start)
 
 def Setup_IMU():
     i2c = busio.I2C(board.SCL, board.SDA)
