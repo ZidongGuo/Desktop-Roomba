@@ -5,8 +5,8 @@ DesktopRoomba.setup()
 DesktopRoomba.Read_DistanceL()
 DesktopRoomba.Read_DistanceR()
 
-DesktopRoomba.Read_IR_Reflectance()
-
+a=DesktopRoomba.Read_IR_Reflectance()
+print (a)
 IMU=DesktopRoomba.Setup_IMU()
 DesktopRoomba.Read_Angle(IMU)
 DesktopRoomba.Read_Acceleration(IMU)
