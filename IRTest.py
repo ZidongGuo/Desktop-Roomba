@@ -7,10 +7,8 @@ try:
 
   while True:
 
-    # let capacitor discharge
     GPIO.setup(GPIO_ir,GPIO.OUT)
     GPIO.output(GPIO_ir, GPIO.HIGH)
-    # let it discharge allll the way
     time.sleep(1) 
     GPIO.setup(GPIO_ir,GPIO.IN)
     start=time.time()
