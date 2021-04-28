@@ -3,7 +3,7 @@ import sys
 import time
 from time import sleep
 DesktopRoomba.setup()
-print(DesktopRoomba.Power)
+print("Power of the robot is ", DesktopRoomba.Power)
 DesktopRoomba.Read_DistanceL()
 DesktopRoomba.Read_DistanceR()
 
@@ -25,5 +25,5 @@ sleep(2)
 DesktopRoomba.Backward(40)
 sleep(2)
 DesktopRoomba.Stop()
-print(DesktopRoomba.Power)
+print("Power of the robot is ", DesktopRoomba.Power)
 #DesktopRoomba.power()
