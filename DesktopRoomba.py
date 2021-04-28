@@ -21,6 +21,11 @@ def setup():
     global EchoR
     global TrigR
     global GPIO_ir
+    global Button
+    global Power
+    Button=26
+    Power=0
+    GPIO.setup(Button, GPIO.IN)
     Motor1A = 23
     Motor1B = 24
     Motor1E = 25
@@ -47,6 +52,15 @@ def setup():
     GPIO.setup(TrigR,GPIO.OUT)
     GPIO.setup(EchoR,GPIO.IN)
     print("All programs have been set up successfully!")
+    def power_callback(input_pin):
+      global Power
+      if (Power==1):
+        Power=0
+        print("Power Off")
+      elif (Power==0):
+        Power=1
+        print("Power On")
+    GPIO.add_event_detect(Button, GPIO.RISING, callback=power_callback)
     return True
 
 def Read_DistanceL():
@@ -78,6 +92,8 @@ def Read_DistanceR():
     distance= TimePassed *17150
     print("Distance from the right ultrasonic sensors is ", distance)
     return distance
+
+
 
 # High value means low reflectance Low value means high reflectance
 def Read_IR_Reflectance():

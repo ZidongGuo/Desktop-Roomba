@@ -1,7 +1,9 @@
 import DesktopRoomba
+import sys
+import time
 from time import sleep
 DesktopRoomba.setup()
-
+print(DesktopRoomba.Power)
 DesktopRoomba.Read_DistanceL()
 DesktopRoomba.Read_DistanceR()
 
@@ -10,7 +12,6 @@ print (a)
 IMU=DesktopRoomba.Setup_IMU()
 DesktopRoomba.Read_Angle(IMU)
 DesktopRoomba.Read_Acceleration(IMU)
-
 
 DesktopRoomba.Set_DutyCycle()
 DesktopRoomba.Set_PWM_Frequency()
@@ -24,5 +25,5 @@ sleep(2)
 DesktopRoomba.Backward(40)
 sleep(2)
 DesktopRoomba.Stop()
-
-
+print(DesktopRoomba.Power)
+#DesktopRoomba.power()
