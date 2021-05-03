@@ -6,7 +6,7 @@ DesktopRoomba.setup()
 print("Power of the robot is ", DesktopRoomba.Power)
 DesktopRoomba.Read_DistanceL()
 DesktopRoomba.Read_DistanceR()
-
+DesktopRoomba.Read_DistanceF()
 a=DesktopRoomba.Read_IR_Reflectance()
 print (a)
 IMU=DesktopRoomba.Setup_IMU()

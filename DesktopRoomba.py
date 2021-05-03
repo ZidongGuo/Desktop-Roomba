@@ -16,6 +16,8 @@ def setup():
     global Motor2E
     global pwm1
     global pwm2
+    global EchoF
+    global TrigF
     global EchoL
     global TrigL
     global EchoR
@@ -43,10 +45,14 @@ def setup():
     pwm1=GPIO.PWM(Motor1E,100)
     pwm2=GPIO.PWM(Motor2E,100)
     
+    EchoF=15
+    TrigF=14
     EchoL=20
     TrigL=21
     EchoR=12
     TrigR=16
+    GPIO.setup(TrigF,GPIO.OUT)
+    GPIO.setup(EchoF,GPIO.IN)
     GPIO.setup(TrigL,GPIO.OUT)
     GPIO.setup(EchoL,GPIO.IN)
     GPIO.setup(TrigR,GPIO.OUT)
@@ -62,6 +68,22 @@ def setup():
         print("Power On")
     GPIO.add_event_detect(Button, GPIO.RISING, callback=power_callback)
     return True
+
+def Read_DistanceF():
+    GPIO.output(TrigF, True)
+    time.sleep(0.00001)
+    GPIO.output(TrigF, False)
+    StartTime=time.time()
+    StopTime=time.time()
+    while GPIO.input(EchoF)==0:
+        StartTime=time.time()
+    while GPIO.input(EchoF)==1:
+        StopTime=time.time()
+    TimePassed=StopTime-StartTime
+    distance= TimePassed *17150
+    print("Distance from the front ultrasonic sensors is ", distance)
+    return distance
+
 
 def Read_DistanceL():
     GPIO.output(TrigL, True)
