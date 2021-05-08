@@ -16,6 +16,7 @@ def FreeToGo():
         return 1
     else:
         return 0
+DR.Power=1
 def Readytostart():
     if (DR.Power==1):
         return True
@@ -26,11 +27,17 @@ try:
 
         while Mode==1:
             if (DR.Power==0):
-                break;
+                break
             while FreeToGo()==1:
+                if (DR.Power==0):
+                    break
                 DR.Forward(40)
-            if (DR.Read_DistanceF()<=MinDistF):
+                sleep(0.03)
+            while (DR.Read_DistanceF()<=MinDistF):
+                if (DR.Power==0):
+                    break
                 DR.Stop()
+                sleep(0.02)
                 if (DR.Read_DistanceL()<MinDistLR and DR.Read_DistanceR()<MinDistLR):
                     DR.Back(40)
                     sleep(0.2)
@@ -42,12 +49,12 @@ try:
                 else:
                     RandAngle=random.random()
                     DR.Turn_Left(RandAngle)
-            elif (DR.Read_DistanceL()<MinDistLR):
-                RandAngle=random.random()
-                DR.Turn_Right(RandAngle)
-            elif (DR.Read_DistanceR()<MinDistLR):
-                RandAngle=random.random()
-                DR.Turn_Left(RandAngle)
+            #elif (DR.Read_DistanceL()<MinDistLR):
+                #RandAngle=random.random()
+                #DR.Turn_Right(RandAngle)
+            #elif (DR.Read_DistanceR()<MinDistLR):
+                #RandAngle=random.random()
+                #DR.Turn_Left(RandAngle)
 
 except KeyboardInterrupt:
     GPIO.cleanup()

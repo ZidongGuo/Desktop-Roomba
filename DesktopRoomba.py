@@ -71,7 +71,7 @@ def setup():
 
 def Read_DistanceF():
     GPIO.output(TrigF, True)
-    time.sleep(0.00001)
+    time.sleep(0.0001)
     GPIO.output(TrigF, False)
     StartTime=time.time()
     StopTime=time.time()
@@ -81,7 +81,7 @@ def Read_DistanceF():
         StopTime=time.time()
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
-    print("Distance from the front ultrasonic sensors is ", distance)
+    #print("Distance from the front ultrasonic sensors is ", distance)
     return distance
 
 
@@ -97,7 +97,7 @@ def Read_DistanceL():
         StopTime=time.time()
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
-    print("Distance from the left ultrasonic sensors is ", distance)
+    #print("Distance from the left ultrasonic sensors is ", distance)
     return distance
 
 def Read_DistanceR():
@@ -112,7 +112,7 @@ def Read_DistanceR():
         StopTime=time.time()
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
-    print("Distance from the right ultrasonic sensors is ", distance)
+    #print("Distance from the right ultrasonic sensors is ", distance)
     return distance
 
 
