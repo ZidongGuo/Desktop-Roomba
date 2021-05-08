@@ -47,10 +47,10 @@ def setup():
     
     EchoF=15
     TrigF=14
-    EchoL=20
-    TrigL=21
-    EchoR=12
-    TrigR=16
+    EchoR=20
+    TrigR=21
+    EchoL=12
+    TrigL=16
     GPIO.setup(TrigF,GPIO.OUT)
     GPIO.setup(EchoF,GPIO.IN)
     GPIO.setup(TrigL,GPIO.OUT)
