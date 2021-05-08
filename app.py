@@ -49,12 +49,18 @@ try:
                 else:
                     RandAngle=random.random()
                     DR.Turn_Left(RandAngle)
-            #elif (DR.Read_DistanceL()<MinDistLR):
-                #RandAngle=random.random()
-                #DR.Turn_Right(RandAngle)
-            #elif (DR.Read_DistanceR()<MinDistLR):
-                #RandAngle=random.random()
-                #DR.Turn_Left(RandAngle)
+            while (DR.Read_DistanceL()<MinDistLR and DR.Read_DistanceF()>MinDistF):
+                if (DR.Power==0):
+                    break
+
+                RandAngle=random.random()
+                DR.Turn_Right(RandAngle)
+            while (DR.Read_DistanceR()<MinDistLR and DR.Read_DistanceF()>MinDistF):
+                if (DR.Power==0):
+                    break
+
+                RandAngle=random.random()
+                DR.Turn_Left(RandAngle)
 
 except KeyboardInterrupt:
     GPIO.cleanup()
