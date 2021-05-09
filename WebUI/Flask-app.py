@@ -17,7 +17,7 @@ app = Flask(__name__, static_folder='assets')
 @app.route("/")
 
 def Home():
-    return app.render_template('index.html')
+    return render_template('index.html')
 
 @app.route('/power/<int:action>')
 def SwitchPower(action):
@@ -88,6 +88,3 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         GPIO.cleanup()
-
-
-
