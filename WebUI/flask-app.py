@@ -11,13 +11,13 @@ MinDistF=7
 MaxTime=800 #Read_IR_Reflectance() should return a value less than 800
 Mode=1
 
-from flask import Flask, redirect
+from flask import Flask, redirect, render_template
 
 app = Flask(__name__, static_folder='assets')
 @app.route("/")
 
 def Home():
-    return app.send_static_file('index.html')
+    return app.render_template('index.html')
 
 @app.route('/power/<int:action>')
 def SwitchPower(action):
