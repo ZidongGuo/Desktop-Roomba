@@ -11,9 +11,9 @@ MinDistF=7
 MaxTime=800 #Read_IR_Reflectance() should return a value less than 800
 Mode=1
 
-from flask import Flask
+from flask import Flask, redirect
 
-app = Flask(__name__, static_folder='')
+app = Flask(__name__, static_folder='assets')
 @app.route("/")
 
 def Home():
