@@ -1,7 +1,7 @@
 import DesktopRoomba
 from threading import Thread
 from time import sleep
-from waiting import wait
+#from waiting import wait
 import RPi.GPIO as GPIO
 import random
 DR=DesktopRoomba
@@ -117,6 +117,7 @@ def SwitchPower(action):
 
 @app.route('/mode/<int:action>')
 def SwitchMode(action):
+    global Mode
     if action==0:
         Mode=0
         SpiralAlgo()
