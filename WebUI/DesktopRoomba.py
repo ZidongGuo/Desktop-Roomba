@@ -1,7 +1,7 @@
 import time
-#import board
-#import busio
-#from adafruit_lsm6ds.lsm6ds33 import LSM6DS33
+import board
+import busio
+from adafruit_lsm6ds.lsm6ds33 import LSM6DS33
 import RPi.GPIO as GPIO
 from time import sleep
 import sys
@@ -25,6 +25,8 @@ def setup():
     global GPIO_ir
     global Button
     global Power
+    global Timeout
+    Timeout=0.003
     GPIO.setmode(GPIO.BCM)
     Button=26
     Power=0
@@ -76,8 +78,15 @@ def Read_DistanceF():
     StartTime=time.time()
     StopTime=time.time()
     while GPIO.input(EchoF)==0:
+        if ((time.time()-StopTime)< Timeout):
+            distance= Timeout*17150
+            return distance
         StartTime=time.time()
     while GPIO.input(EchoF)==1:
+        if ((time.time()-StartTime)< Timeout):
+            distance= Timeout*17150
+            return distance
+
         StopTime=time.time()
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
@@ -92,8 +101,14 @@ def Read_DistanceL():
     StartTime=time.time()
     StopTime=time.time()
     while GPIO.input(EchoL)==0:
+        if ((time.time()-StopTime)< Timeout):
+            distance= Timeout*17150
+            return distance
         StartTime=time.time()
     while GPIO.input(EchoL)==1:
+        if ((time.time()-StartTime)< Timeout):
+            distance= Timeout*17150
+            return distance
         StopTime=time.time()
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
@@ -107,8 +122,14 @@ def Read_DistanceR():
     StartTime=time.time()
     StopTime=time.time()
     while GPIO.input(EchoR)==0:
+        if ((time.time()-StopTime)< Timeout):
+            distance= Timeout*17150
+            return distance
         StartTime=time.time()
     while GPIO.input(EchoR)==1:
+        if ((time.time()-StartTime)< Timeout):
+            distance= Timeout*17150
+            return distance
         StopTime=time.time()
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150

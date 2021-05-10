@@ -25,6 +25,7 @@ def setup():
     global GPIO_ir
     global Button
     global Power
+    GPIO.setmode(GPIO.BCM)
     Button=26
     Power=0
     GPIO.setup(Button, GPIO.IN)
@@ -35,7 +36,6 @@ def setup():
     Motor2B = 9
     Motor2E = 10
     GPIO_ir = 1
-    GPIO.setmode(GPIO.BCM)
     GPIO.setup(Motor1A,GPIO.OUT)
     GPIO.setup(Motor1B,GPIO.OUT)
     GPIO.setup(Motor1E,GPIO.OUT)
@@ -81,7 +81,7 @@ def Read_DistanceF():
         StopTime=time.time()
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
-    #print("Distance from the front ultrasonic sensors is ", distance)
+    print("Distance from the front ultrasonic sensors is ", distance)
     return distance
 
 
@@ -97,7 +97,7 @@ def Read_DistanceL():
         StopTime=time.time()
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
-    #print("Distance from the left ultrasonic sensors is ", distance)
+    print("Distance from the left ultrasonic sensors is ", distance)
     return distance
 
 def Read_DistanceR():
@@ -112,7 +112,7 @@ def Read_DistanceR():
         StopTime=time.time()
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
-    #print("Distance from the right ultrasonic sensors is ", distance)
+    print("Distance from the right ultrasonic sensors is ", distance)
     return distance
 
 

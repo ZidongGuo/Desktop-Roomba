@@ -1,7 +1,7 @@
 import DesktopRoomba
 from threading import Thread
 from time import sleep
-#from waiting import wait
+#'from waiting import wait
 import RPi.GPIO as GPIO
 import random
 DR=DesktopRoomba
@@ -71,11 +71,13 @@ def SpiralAlgo():
         increasedtime=0.5
         numberofspiral=10
         minspeed=30
-        maxspeed=90
+        maxspeed=80
         for i in range (0, numberofspiral):
             if (DR.Power==0 or Mode!=0):
                 break
             if (FreeToGo()==0):
+                DR.Stop()
+                sleep(1)
                 while (FreeToGo()==0 and Mode==0):
                     DR.Stop()
                     sleep(0.5)
@@ -134,6 +136,6 @@ def SwitchMode(action):
 
 if __name__ == "__main__":
     try:
-        app.run(host='0.0.0.0', port=80, debug=True, threaded=True)
+        app.run(host='0.0.0.0', port=9876, debug=True, threaded=True)
     except KeyboardInterrupt:
         GPIO.cleanup()
