@@ -6,8 +6,8 @@ import RPi.GPIO as GPIO
 import random
 DR=DesktopRoomba
 DR.setup()
-MinDistLR=5 #all four read_distance() should return a value less than 3
-MinDistF=7
+MinDistLR=10 #all four read_distance() should return a value less than 3
+MinDistF=10
 MaxTime=800 #Read_IR_Reflectance() should return a value less than 800
 Mode=0
 
@@ -40,14 +40,18 @@ def RandAlgo():
             sleep(0.02)
             if (DR.Read_DistanceL()<MinDistLR and DR.Read_DistanceR()<MinDistLR):
                 DR.Backward(40)
-                sleep(0.2)
-                RandAngle=random.random()
+                sleep(1)
+                RandAngle=3*random.random()
                 DR.Turn_Right(RandAngle)
             elif (DR.Read_DistanceL()<MinDistLR):
-                RandAngle=random.random()
+                DR.Backward(40)
+                sleep(0.3)
+                RandAngle=2*random.random()
                 DR.Turn_Right(RandAngle)
             else:
-                RandAngle=random.random()
+                DR.Backward(40)
+                sleep
+                RandAngle=2*random.random()
                 DR.Turn_Left(RandAngle)
         while (DR.Read_DistanceL()<MinDistLR and DR.Read_DistanceF()>MinDistF  and Mode==1):
             if (DR.Power==0):
@@ -75,10 +79,30 @@ def SpiralAlgo():
         for i in range (0, numberofspiral):
             if (DR.Power==0 or Mode!=0):
                 break
-            if (FreeToGo()==0):
+
+            cnt=0
+            while (FreeToGo()==1 and cnt<1000):
+                DR.pwm1.start(maxspeed)
+                DR.pwm2.start(minspeed)
+                GPIO.output(DR.Motor1A,GPIO.HIGH)
+                GPIO.output(DR.Motor1B,GPIO.LOW)
+                GPIO.output(DR.Motor1E,GPIO.HIGH)
+
+                GPIO.output(DR.Motor2A,GPIO.HIGH)
+                GPIO.output(DR.Motor2B,GPIO.LOW)
+                GPIO.output(DR.Motor2E,GPIO.HIGH)
+                sleep(tourtime/1000)
+                cnt=cnt+1
+            minspeed=minspeed+5
+            tourtime=tourtime+increasedtime
+            print("Spiral: ", i);
+            if (FreeToGo()==0 and DR.Power==1):
+                tourtime=3
+                minspeed=30
+                maxspeed=80
                 DR.Stop()
                 sleep(1)
-                while (FreeToGo()==0 and Mode==0):
+                while (FreeToGo()==0 and Mode==0 and DR.Power==1):
                     DR.Stop()
                     sleep(0.5)
                     if (DR.Read_DistanceF()<=MinDistF and DR.Read_DistanceL()<MinDistLR and DR.Read_DistanceR()<MinDistLR):
@@ -90,20 +114,10 @@ def SpiralAlgo():
                 RandTime=3*random.random()
                 sleep(RandTime)
                 break
-            DR.pwm1.start(maxspeed)
-            DR.pwm2.start(minspeed)
-            GPIO.output(DR.Motor1A,GPIO.HIGH)
-            GPIO.output(DR.Motor1B,GPIO.LOW)
-            GPIO.output(DR.Motor1E,GPIO.HIGH)
-
-            GPIO.output(DR.Motor2A,GPIO.HIGH)
-            GPIO.output(DR.Motor2B,GPIO.LOW)
-            GPIO.output(DR.Motor2E,GPIO.HIGH)
-            sleep(tourtime)
-            minspeed=minspeed+5
-            tourtime=tourtime+increasedtime
-            print("Spiral: ", i);
             if (i==numberofspiral-1):
+                tourtime=3
+                minspeed=30
+                maxspeed=80
                 RandAngle=random.random()
                 RandTime=3*random.random()
                 DR.Turn_Left(RandAngle)

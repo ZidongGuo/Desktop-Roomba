@@ -77,17 +77,12 @@ def Read_DistanceF():
     GPIO.output(TrigF, False)
     StartTime=time.time()
     StopTime=time.time()
-    while GPIO.input(EchoF)==0:
-        if ((time.time()-StopTime)< Timeout):
-            distance= Timeout*17150
-            return distance
+    while GPIO.input(EchoF)==0 and (time.time()-StopTime)< Timeout :
         StartTime=time.time()
-    while GPIO.input(EchoF)==1:
-        if ((time.time()-StartTime)< Timeout):
-            distance= Timeout*17150
-            return distance
-
+    while GPIO.input(EchoF)==1 and (time.time()-StartTime)< Timeout:
         StopTime=time.time()
+    if (StopTime<StartTime):
+        return 15
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
     #print("Distance from the front ultrasonic sensors is ", distance)
@@ -100,16 +95,12 @@ def Read_DistanceL():
     GPIO.output(TrigL, False)
     StartTime=time.time()
     StopTime=time.time()
-    while GPIO.input(EchoL)==0:
-        if ((time.time()-StopTime)< Timeout):
-            distance= Timeout*17150
-            return distance
+    while GPIO.input(EchoL)==0 and (time.time()-StopTime)< Timeout :
         StartTime=time.time()
-    while GPIO.input(EchoL)==1:
-        if ((time.time()-StartTime)< Timeout):
-            distance= Timeout*17150
-            return distance
+    while GPIO.input(EchoL)==1 and (time.time()-StartTime)< Timeout:
         StopTime=time.time()
+    if (StopTime<StartTime):
+        return 15
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
     #print("Distance from the left ultrasonic sensors is ", distance)
@@ -121,16 +112,12 @@ def Read_DistanceR():
     GPIO.output(TrigR, False)
     StartTime=time.time()
     StopTime=time.time()
-    while GPIO.input(EchoR)==0:
-        if ((time.time()-StopTime)< Timeout):
-            distance= Timeout*17150
-            return distance
+    while GPIO.input(EchoR)==0 and (time.time()-StopTime)< Timeout:
         StartTime=time.time()
-    while GPIO.input(EchoR)==1:
-        if ((time.time()-StartTime)< Timeout):
-            distance= Timeout*17150
-            return distance
+    while GPIO.input(EchoR)==1 and (time.time()-StartTime)< Timeout:
         StopTime=time.time()
+    if (StopTime<StartTime):
+        return 15
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
     #print("Distance from the right ultrasonic sensors is ", distance)
