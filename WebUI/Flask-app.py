@@ -1,3 +1,5 @@
+
+import time
 import DesktopRoomba
 from threading import Thread
 from time import sleep
@@ -10,13 +12,13 @@ MinDistLR=10 #all four read_distance() should return a value less than 3
 MinDistF=10
 MaxTime=800 #Read_IR_Reflectance() should return a value less than 800
 Mode=0
-
+Stuck=0
 from flask import Flask, redirect, render_template
 
 app = Flask(__name__, static_folder='assets')
 
 def FreeToGo():
-    if (DR.Read_DistanceL()>MinDistLR and DR.Read_DistanceR()>MinDistLR and DR.Read_DistanceF()>MinDistF and DR.Power==1):
+    if (DR.Read_DistanceL()>MinDistLR and DR.Read_DistanceR()>MinDistLR and DR.Read_DistanceF()>MinDistF and DR.Power==1 and Stuck==0):
         return 1
     else:
         return 0
@@ -32,7 +34,11 @@ def RandAlgo():
         while (FreeToGo()==1 and Mode==1):
             DR.Forward(40)
             sleep(0.03)
-        while (DR.Read_DistanceF()<=MinDistF and Mode==1):
+        if (Stuck==1):
+            DR.Backward(50)
+            sleep(1)
+            DR.Stop()
+        while (DR.Read_DistanceF()<=MinDistF and Mode==1 and Stuck==0):
             if (DR.Power==0):
                 DR.Stop()
                 break
@@ -53,14 +59,14 @@ def RandAlgo():
                 sleep
                 RandAngle=2*random.random()
                 DR.Turn_Left(RandAngle)
-        while (DR.Read_DistanceL()<MinDistLR and DR.Read_DistanceF()>MinDistF  and Mode==1):
+        while (DR.Read_DistanceL()<MinDistLR and DR.Read_DistanceF()>MinDistF  and Mode==1 and Stuck==0):
             if (DR.Power==0):
                 DR.Stop()
                 break
 
             RandAngle=random.random()
             DR.Turn_Right(RandAngle)
-        while (DR.Read_DistanceR()<MinDistLR and DR.Read_DistanceF()>MinDistF  and Mode==1):
+        while (DR.Read_DistanceR()<MinDistLR and DR.Read_DistanceF()>MinDistF  and Mode==1 and Stuck==0):
             if (DR.Power==0):
                 DR.Stop()
                 break
@@ -97,6 +103,10 @@ def SpiralAlgo():
             tourtime=tourtime+increasedtime
             print("Spiral: ", i);
             if (FreeToGo()==0 and DR.Power==1):
+                if (Stuck==1):
+                    DR.Backward(50)
+                    sleep(1)
+                    DR.Stop()
                 tourtime=3
                 minspeed=30
                 maxspeed=80
@@ -123,6 +133,27 @@ def SpiralAlgo():
                 DR.Turn_Left(RandAngle)
                 DR.Forward(50)
                 sleep(RandTime)
+def GetStuck():
+    global Stuck
+    IMU=DR.Setup_IMU()
+    while True:
+        if DR.Power==1:
+            Movement=1
+            InitialTime=time.time()
+            MaxTolerance=6
+            while (time.time()-InitialTime < MaxTolerance and DR.Power==1):
+                AngleAccel=DR.Read_Angle(IMU)
+                Total=abs(AngleAccel[0]+AngleAccel[1]+AngleAccel[2])
+                if Total>0.35:
+                    print("Not Stuck")
+                    Movement=1
+                    Stuck=0
+                    break
+                else:
+                    Movement=0
+            if Movement==0:
+                Stuck=1
+                print("Get Stuck")
 @app.route("/")
 
 def Home():
@@ -134,6 +165,8 @@ def SwitchPower(action):
         DR.Stop()
         DR.Power=0
     elif action==1:
+        t1=Thread(target=GetStuck)
+        t1.start()
         DR.Power=1
     return redirect("/")
 
@@ -150,6 +183,11 @@ def SwitchMode(action):
 
 if __name__ == "__main__":
     try:
+        
+                    
+        #t1=Thread(target=GetStuck)
+        #t1.start()
         app.run(host='0.0.0.0', port=9876, debug=True, threaded=True)
+        #t1.join()
     except KeyboardInterrupt:
         GPIO.cleanup()

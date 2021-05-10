@@ -11,12 +11,15 @@ DesktopRoomba.Read_DistanceF()
 #a=DesktopRoomba.Read_IR_Reflectance()
 #print (a)
 IMU=DesktopRoomba.Setup_IMU()
+#while True:
+#    a=DesktopRoomba.Read_Angle(IMU)
+
+#    print(a)
+#    print(DesktopRoomba.Read_Acceleration(IMU))
+
 a=DesktopRoomba.Read_Angle(IMU)
-
-print(a)
-print(a[1])
-print(DesktopRoomba.Read_Acceleration(IMU))
-
+b=abs(a[0])+abs(a[1])+abs(a[2])
+print(b)
 #DesktopRoomba.Set_DutyCycle()
 #DesktopRoomba.Set_PWM_Frequency()
 #DesktopRoomba.Away_from_edges()

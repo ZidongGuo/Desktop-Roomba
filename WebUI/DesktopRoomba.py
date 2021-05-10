@@ -140,16 +140,16 @@ def Read_IR_Reflectance():
 def Setup_IMU():
     i2c = busio.I2C(board.SCL, board.SDA)
     s33 = LSM6DS33(i2c)
-    print("IMU is set up")
+    #print("IMU is set up")
     return s33
 
-#def Read_Angle(IMU):
-#    print("Gyro X:%.2f, Y: %.2f, Z: %.2f radians/s" % (IMU.gyro))
-#    return IMU.gyro
+def Read_Angle(IMU):
+    #print("Gyro X:%.2f, Y: %.2f, Z: %.2f radians/s" % (IMU.gyro))
+    return IMU.gyro
 
-#def Read_Acceleration(IMU):
-#    print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2"%(IMU.acceleration))
-#    return IMU.acceleration
+def Read_Acceleration(IMU):
+    #print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2"%(IMU.acceleration))
+    return IMU.acceleration
 
 def Set_DutyCycle():
     print("Duty Cycle is set to be")
