@@ -211,8 +211,10 @@ def SwitchPower(action):
 @app.route('/mode/<int:action>')
 def SwitchMode(action):
     global Mode
-    IsMode0=0
-    IsMode1=0
+    global IsMode0
+    global IsMode1
+    IsMode0=" "
+    ISMode1=" "
     if action==0:
         IsMode0="active"
         IsMode1=" "
