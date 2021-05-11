@@ -1,4 +1,3 @@
-
 import time
 import DesktopRoomba
 from threading import Thread
@@ -13,6 +12,7 @@ MinDistF=10
 MaxTime=800 #Read_IR_Reflectance() should return a value less than 800
 Mode=-1
 Stuck=0
+Edge=0
 IsOn=" "
 IsOff="active"
 IsMode0=" "
@@ -22,7 +22,7 @@ from flask import Flask, redirect, render_template
 app = Flask(__name__, static_folder='assets')
 
 def FreeToGo():
-    if (DR.Read_DistanceL()>MinDistLR and DR.Read_DistanceR()>MinDistLR and DR.Read_DistanceF()>MinDistF and DR.Power==1 and Stuck==0):
+    if (DR.Read_DistanceL()>MinDistLR and DR.Read_DistanceR()>MinDistLR and DR.Read_DistanceF()>MinDistF and DR.Power==1 and Stuck==0 and Edge==0):
         return 1
     else:
         return 0
@@ -45,14 +45,14 @@ def RandAlgo():
         while (FreeToGo()==1 and Mode==1):
             DR.Forward(40)
             sleep(0.03)
-        if (Stuck==1):
+        if (Stuck==1 or Edge==1):
             DR.Stop()
             sleep(0.5)
             DR.Backward(40)
             sleep(1)
-            DR.Turn_Left(0.1)
+            DR.Turn_Left(0.2)
             DR.Stop()
-        while (DR.Read_DistanceF()<=MinDistF and Mode==1 and Stuck==0):
+        while (DR.Read_DistanceF()<=MinDistF and Mode==1 and Stuck==0 and Edge==0):
             if (DR.Power==0):
                 DR.Stop()
                 break
@@ -73,14 +73,14 @@ def RandAlgo():
                 sleep
                 RandAngle=2*random.random()
                 DR.Turn_Left(RandAngle)
-        while (DR.Read_DistanceL()<MinDistLR and DR.Read_DistanceF()>MinDistF  and Mode==1 and Stuck==0):
+        while (DR.Read_DistanceL()<MinDistLR and DR.Read_DistanceF()>MinDistF  and Mode==1 and Stuck==0 and Edge==0):
             if (DR.Power==0):
                 DR.Stop()
                 break
 
             RandAngle=random.random()
             DR.Turn_Right(RandAngle)
-        while (DR.Read_DistanceR()<MinDistLR and DR.Read_DistanceF()>MinDistF  and Mode==1 and Stuck==0):
+        while (DR.Read_DistanceR()<MinDistLR and DR.Read_DistanceF()>MinDistF  and Mode==1 and Stuck==0 and Edge==0):
             if (DR.Power==0):
                 DR.Stop()
                 break
@@ -126,14 +126,14 @@ def SpiralAlgo():
                 minspeed=15
                 DR.Stop()
                 sleep(1)
-                if (Stuck==1):
+                if (Stuck==1 or Edge==1):
                     DR.Backward(40)
                     RandTime=3*random.random()
                     sleep(RandTime)
                     DR.Stop()
                     break
 
-                while (FreeToGo()==0 and Mode==0 and DR.Power==1 and Stuck==0):
+                while (FreeToGo()==0 and Mode==0 and DR.Power==1 and Stuck==0 and Edge==0):
                     DR.Stop()
                     sleep(0.5)
                     if (DR.Read_DistanceF()<=MinDistF and DR.Read_DistanceL()<MinDistLR and DR.Read_DistanceR()<MinDistLR):
@@ -184,6 +184,19 @@ def GetStuck():
             if Movement==0:
                 Stuck=1
                 print("Get Stuck")
+
+def EdgeDetected():
+    global Edge
+    DR.Read_IR_Reflectance() #Avoid the initial wrong reading from the IR sensor
+    MaxAcceptance = 1300
+    while DR.Power==1:
+        TimeToCharge=DR.Read_IR_Reflectance()
+        if TimeToCharge > MaxAcceptance:
+            Edge=1
+            DR.Stop()
+            print("Edge Detected")
+        else:
+            Edge=0
 @app.route("/")
 
 def Home():
@@ -198,6 +211,8 @@ def SwitchPower(action):
     if action==0:
         IsOff="active"
         IsOn=" "
+        DR.Backward(40)
+        sleep(1)
         DR.Stop()
         DR.Power=0
     elif action==1:
@@ -205,6 +220,8 @@ def SwitchPower(action):
         IsOn="active"
         t1=Thread(target=GetStuck)
         t1.start()
+        t2=Thread(target=EdgeDetected)
+        t2.start()
         DR.Power=1
     return redirect("/")
 

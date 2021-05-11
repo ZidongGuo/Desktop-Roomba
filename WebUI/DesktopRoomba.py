@@ -134,7 +134,7 @@ def Read_IR_Reflectance():
     start=time.time()
     GPIO.wait_for_edge(GPIO_ir, GPIO.FALLING,timeout=200)
     end=time.time()
-    print("%f seconds, %f us" %(end-start,1000000*(end-start) ) )
+    #print("%f seconds, %f us" %(end-start,1000000*(end-start) ) )
     return 1000000*(end-start)
 
 def Setup_IMU():
