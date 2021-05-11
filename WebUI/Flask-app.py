@@ -244,6 +244,10 @@ def SwitchMode(action):
         RandAlgo()
     return redirect("/")
 
+@app.route('/AdditionalInformation')
+def loadInfo():
+    return render_template('AdditionalInformation.html')
+
 if __name__ == "__main__":
     try:
         #t1=Thread(target=GetStuck)
