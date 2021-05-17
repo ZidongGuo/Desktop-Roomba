@@ -1,3 +1,4 @@
+
 import time
 import board
 import busio
@@ -25,6 +26,8 @@ def setup():
     global GPIO_ir
     global Button
     global Power
+    global Timeout
+    Timeout=0.003
     GPIO.setmode(GPIO.BCM)
     Button=26
     Power=0
@@ -75,13 +78,15 @@ def Read_DistanceF():
     GPIO.output(TrigF, False)
     StartTime=time.time()
     StopTime=time.time()
-    while GPIO.input(EchoF)==0:
+    while GPIO.input(EchoF)==0 and (time.time()-StopTime)< Timeout :
         StartTime=time.time()
-    while GPIO.input(EchoF)==1:
+    while GPIO.input(EchoF)==1 and (time.time()-StartTime)< Timeout:
         StopTime=time.time()
+    if (StopTime<StartTime):
+        return 15
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
-    print("Distance from the front ultrasonic sensors is ", distance)
+    #print("Distance from the front ultrasonic sensors is ", distance)
     return distance
 
 
@@ -91,13 +96,15 @@ def Read_DistanceL():
     GPIO.output(TrigL, False)
     StartTime=time.time()
     StopTime=time.time()
-    while GPIO.input(EchoL)==0:
+    while GPIO.input(EchoL)==0 and (time.time()-StopTime)< Timeout :
         StartTime=time.time()
-    while GPIO.input(EchoL)==1:
+    while GPIO.input(EchoL)==1 and (time.time()-StartTime)< Timeout:
         StopTime=time.time()
+    if (StopTime<StartTime):
+        return 15
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
-    print("Distance from the left ultrasonic sensors is ", distance)
+    #print("Distance from the left ultrasonic sensors is ", distance)
     return distance
 
 def Read_DistanceR():
@@ -106,13 +113,15 @@ def Read_DistanceR():
     GPIO.output(TrigR, False)
     StartTime=time.time()
     StopTime=time.time()
-    while GPIO.input(EchoR)==0:
+    while GPIO.input(EchoR)==0 and (time.time()-StopTime)< Timeout:
         StartTime=time.time()
-    while GPIO.input(EchoR)==1:
+    while GPIO.input(EchoR)==1 and (time.time()-StartTime)< Timeout:
         StopTime=time.time()
+    if (StopTime<StartTime):
+        return 15
     TimePassed=StopTime-StartTime
     distance= TimePassed *17150
-    print("Distance from the right ultrasonic sensors is ", distance)
+    #print("Distance from the right ultrasonic sensors is ", distance)
     return distance
 
 
@@ -126,21 +135,21 @@ def Read_IR_Reflectance():
     start=time.time()
     GPIO.wait_for_edge(GPIO_ir, GPIO.FALLING,timeout=200)
     end=time.time()
-    print("%f seconds, %f us" %(end-start,1000000*(end-start) ) )
+    #print("%f seconds, %f us" %(end-start,1000000*(end-start) ) )
     return 1000000*(end-start)
 
 def Setup_IMU():
     i2c = busio.I2C(board.SCL, board.SDA)
     s33 = LSM6DS33(i2c)
-    print("IMU is set up")
+    #print("IMU is set up")
     return s33
 
 def Read_Angle(IMU):
-    print("Gyro X:%.2f, Y: %.2f, Z: %.2f radians/s" % (IMU.gyro))
+    #print("Gyro X:%.2f, Y: %.2f, Z: %.2f radians/s" % (IMU.gyro))
     return IMU.gyro
 
 def Read_Acceleration(IMU):
-    print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2"%(IMU.acceleration))
+    #print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2"%(IMU.acceleration))
     return IMU.acceleration
 
 def Set_DutyCycle():
